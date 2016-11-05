@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
     }
 
 
-    FILE *logfile;
+    FILE *logfile = 0;
     if (logpath) {
         if (!(logfile = fopen(logpath, "wx"))) {
             switch (errno) {
