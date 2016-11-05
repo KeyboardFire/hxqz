@@ -27,8 +27,11 @@
 
 #define ADDITION 0x1
 #define MULTIPLICATION 0x2
-#define BINARY 0x4
-#define NUM_OPS 3
+#define TO_BINARY 0x4
+#define FROM_BINARY 0x8
+#define TO_DECIMAL 0x10
+#define FROM_DECIMAL 0x20
+#define NUM_OPS 6
 
 #define BUF_SIZE 10;
 
@@ -39,6 +42,15 @@
             fprintf(logfile, __VA_ARGS__);\
         }\
     } while (0)
+
+#define FAKEBIN(x) (((((a) >> 3) & 1) << 12) |\
+                    ((((a) >> 2) & 1) <<  8) |\
+                    ((((a) >> 1) & 1) <<  4) |\
+                    ((a) & 1))
+#define FAKEDEC(x) ((((a) /    1) % 10)            +\
+                    (((a) /   10) % 10) * 16       +\
+                    (((a) /  100) % 10) * 16*16    +\
+                    (((a) / 1000) % 10) * 16*16*16)
 
 int main(int argc, char **argv) {
     srand(time(NULL));
@@ -52,7 +64,10 @@ int main(int argc, char **argv) {
                 switch (*c) {
                 case 'a': mode |= ADDITION; break;
                 case 'm': mode |= MULTIPLICATION; break;
-                case 'b': mode |= BINARY; break;
+                case 'b': mode |= TO_BINARY; break;
+                case 'B': mode |= FROM_BINARY; break;
+                case 'd': mode |= TO_DECIMAL; break;
+                case 'D': mode |= FROM_DECIMAL; break;
                 case 'h': printHelp = 1; break;
                 case 'v': printVersion = 1; break;
                 case 't': reportTime = 1; break;
@@ -88,7 +103,7 @@ int main(int argc, char **argv) {
 
     if (printHelp || !mode) {
         printf(
-            "usage: hxqz [-a|-m|-b] [OPTION]...\n"
+            "usage: hxqz [-a|-m|-b|-B|-d|-D] [OPTION]...\n"
             "       hxqz -h\n"
             "       hxqz -v\n"
             "\n"
@@ -96,7 +111,10 @@ int main(int argc, char **argv) {
             "-v         output the version of hxqz\n"
             "-a         test addition\n"
             "-m         test multiplication\n"
-            "-b         test binary conversion\n"
+            "-b         test conversion to binary\n"
+            "-B         test conversion from binary\n"
+            "-d         test conversion to decimal\n"
+            "-D         test conversion from decimal\n"
             "-t         report time taken to answer\n"
             "-l FILE    log output to FILE\n"
         );
@@ -142,14 +160,25 @@ int main(int argc, char **argv) {
                 answer = a*b;
                 lprintf(logfile, "%x*%x=? ", a, b);
                 break;
-            case BINARY:
+            case TO_BINARY:
                 a = rand() % 16;
-                answer =
-                    (((a >> 3) & 1) << 12) |
-                    (((a >> 2) & 1) <<  8) |
-                    (((a >> 1) & 1) <<  4) |
-                    (a & 1);
-                lprintf(logfile, "%x -> binary? ", a);
+                answer = FAKEBIN(a);
+                lprintf(logfile, "%x hex->bin? ", a);
+                break;
+            case FROM_BINARY:
+                a = rand() % 16;
+                answer = a;
+                lprintf(logfile, "%04x bin->hex? ", FAKEBIN(a));
+                break;
+            case TO_DECIMAL:
+                a = rand() % (16*16);
+                answer = FAKEDEC(a);
+                lprintf(logfile, "%x hex->dec? ", a);
+                break;
+            case FROM_DECIMAL:
+                a = rand() % (16*16);
+                answer = a;
+                lprintf(logfile, "%d dec->hex? ", a);
                 break;
         }
 
