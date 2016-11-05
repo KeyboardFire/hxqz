@@ -1,0 +1,38 @@
+.TH HXQZ 6 "2016-11-05"
+.SH NAME
+hxqz \- hex arithmetic quiz
+.SH SYNOPSIS
+.B hxqz
+[\fB-a\fR|\fB-m\fR|\fB-b\fR]
+[\fIOPTION\fR]...
+.br
+.B hxqz
+\fB\-h\fR
+.br
+.SH DESCRPTION
+.B hxqz
+is a program that quizzes you on randomly generated hexadecimal arithmetic
+problems. It allows you to specify which types of problems appear in the quiz.
+.SH OPTIONS
+.TP
+.BR \-h
+Output a help message.
+.TP
+.BR \-a
+Include single-digit addition problems in the quiz.
+.TP
+.BR \-m
+Include single-digit multiplication problems in the quiz.
+.TP
+.BR \-b
+Include single-digit hex-to-binary problems in the quiz.
+.TP
+.BR \-t
+Report the time it takes to answer in the output.
+.TP
+.BR \-l
+Specify a log file to copy all output to (requires 1 argument).
+.SH BUGS
+Don't think so.
+.SH AUTHOR
+KeyboardFire <andy@keyboardfire.com>

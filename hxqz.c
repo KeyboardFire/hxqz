@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 
     if (printHelp || !mode) {
         printf(
-            "usage: hxqz [-a|-m|-b] [OPTION...]\n"
+            "usage: hxqz [-a|-m|-b] [OPTION]...\n"
             "       hxqz -h\n"
             "\n"
             "-h         output this help message\n"
