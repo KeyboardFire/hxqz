@@ -21,6 +21,10 @@
 #include <sys/time.h>
 #include <time.h>
 
+#define VERSION_MAJOR 0
+#define VERSION_MINOR 0
+#define VERSION_PATCH 1
+
 #define ADDITION 0x1
 #define MULTIPLICATION 0x2
 #define BINARY 0x4
@@ -39,7 +43,7 @@
 int main(int argc, char **argv) {
     srand(time(NULL));
 
-    int mode = 0, printHelp = 0, reportTime = 0, err = 0;
+    int mode = 0, printHelp = 0, printVersion = 0, reportTime = 0, err = 0;
     char *logpath = 0;
 
     for (int i = 0; i < argc; ++i) {
@@ -50,6 +54,7 @@ int main(int argc, char **argv) {
                 case 'm': mode |= MULTIPLICATION; break;
                 case 'b': mode |= BINARY; break;
                 case 'h': printHelp = 1; break;
+                case 'v': printVersion = 1; break;
                 case 't': reportTime = 1; break;
                 case 'l':
                     if (c[1]) {
@@ -75,12 +80,20 @@ int main(int argc, char **argv) {
 
     if (err) return 1;
 
+    if (printVersion) {
+        printf("hxqz version %d.%d.%d\n",
+            VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
+        return 0;
+    }
+
     if (printHelp || !mode) {
         printf(
             "usage: hxqz [-a|-m|-b] [OPTION]...\n"
             "       hxqz -h\n"
+            "       hxqz -v\n"
             "\n"
             "-h         output this help message\n"
+            "-v         output the version of hxqz\n"
             "-a         test addition\n"
             "-m         test multiplication\n"
             "-b         test binary conversion\n"
